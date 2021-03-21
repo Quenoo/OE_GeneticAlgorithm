@@ -24,4 +24,3 @@ class Population:
         vector = []
         for i in range(0, self.num_of_bits):
             vector.insert(0, 2 ** i)
-            
