@@ -5,24 +5,28 @@ from Evaluation import evaluate_population
 
 
 class Selection:
-    def return_chosen_method(method, population, percentage):
-        if (method == 'best'):
-            return best(population, percentage)
-        else if (method == 'roulette_wheel'):
-            return roulette_wheel(population, percentage)
-        else if (method == 'tournament'):
-            return tournament(population, percentage)
+    def __init__(self, decision, percentage):
+        self.decision = decision
+        self.percentage = percentage
+
+    def select(self):
+        if self.decision == 'best':
+            return best(population)
+        else self.decision == 'roulette_wheel':
+            return roulette_wheel(population)
+        else if self.decision 'tournament':
+            return tournament(population)
         else:
             pass
 
-    def best(population, percentage):
+    def best(self, population):
         evaluated_population = evaluate_population(population, booth_function)
         sorted_population = np.sort(evaluated_population) # from lowest, as the function has a minimum at 0
-        new_population, rest = np.split(sorted_population, int(len(sorted_population) * percentage))
+        new_population, rest = np.split(sorted_population, int(len(sorted_population) * self.percentage))
 
         return new_population
 
-    def roulette_wheel(population, percentage):
+    def roulette_wheel(self, population):
         evaluated_population = evaluate_population(population, booth_function)
         fitness_population = 1 / evaluate_population(population)
         fitness_sum = np.sum(evaluated_population)
@@ -42,10 +46,10 @@ class Selection:
                 new_population.append(fitness_population[i])
                 break
 
-        return new_population
+        return np.array(new_population)
 
-    def tournament(population, percentage):
-        tournament_size = (int(len(population) * percentage))
+    def tournament(self, population):
+        tournament_size = (int(len(population) * self.percentage))
 
         evaluated_population = evaluate_population(population, booth_function)
         groups = np.array_split(evaluated_population, tournament_size)
