@@ -19,6 +19,7 @@ class Algorithm:
 
         # dla kazdej eopki
         # ocen polulacje (evaluate)
+        fitness = self.Population.evaluate_population(pop)
         # zapisz % najlepszych (strategia elitarna)
         # wybierz gatunki do crossowania (selection)
         # krzyzowanie gatunków (cross)
