@@ -9,18 +9,40 @@ class Population:
         self.range_min = range_min
         self.range_max = range_max
         self.precision = precision
-        self.num_of_bits = self.get_num_of_bits()
-        self.new_step = self.new_step()
+        self.num_of_bits = self.binary_lenght()
 
-    def get_num_of_bits(self):
-        return int((self.range_max - self.range_min) / self.precision).bit_length()
+    def to_dec(self, li): # takes numpy array, returns decimal represntation
+        li = ''.join(str(int(e)) for e in li)
+        return int(li, 2)
+
+    def binary_lenght(self):
+        a = self.range_min
+        b = self.range_max
+        d = self.precision
+        return int(np.ceil(np.log2((b - a) * (10 ** d)) + np.log2(1)))
 
     def generate_population(self):
-        return np.random.randint(2, size=(self.population_size, self.num_of_variables * self.num_of_bits))
+        return np.random.randint(2, size=(self.population_size, self.num_of_variables, self.num_of_bits))
 
-    def decode_individual(self, individual):
-        temp = individual.reshape((self.num_of_variables, self.num_of_bits))
-        decode_individual = np.ndarray(self.num_of_variables)
-        vector = []
-        for i in range(0, self.num_of_bits):
-            vector.insert(0, 2 ** i)
+    def binary_to_decimal(self, chromosomes):
+        a = self.range_min
+        b = self.range_max
+        # d = self.precision
+        m = self.num_of_bits
+        decimal = []
+        for i in range(0, len(chromosomes)):
+            decimal_bin_x1 = self.to_dec(chromosomes[i][0])
+            x1 = a + decimal_bin_x1 * (b - a) / (2 ** m - 1)
+            decimal_bin_x2 = self.to_dec(chromosomes[i][1])
+            x2 = a + decimal_bin_x2 * (b - a) / (2 ** m - 1)
+            decimal.append((x1, x2))
+        return decimal
+
+
+if __name__ == '__main__':
+    pop = Population(lambda x: x**2, 5, 2, -1, 1, 6)
+    p = pop.generate_population()
+    decoded = pop.binary_to_decimal(p)
+    print(decoded)
+    pass
+
