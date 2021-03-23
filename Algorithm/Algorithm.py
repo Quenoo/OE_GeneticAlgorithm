@@ -1,6 +1,10 @@
-from Algorithm.Population import *
-from Algorithm.Crossover import *
-from Algorithm.Function import booth_function
+# from Algorithm.Population import *
+from Crossover import *
+from Function import booth_function
+from Population import *
+# from Algorithm.Crossover import Crossover
+# from Algorithm.Function import booth_function
+# from Algorithm.Population import Population
 
 
 class Algorithm:
@@ -11,11 +15,16 @@ class Algorithm:
     def run(self):
 
         pop = self.Population.generate_population()
+        pass
 
         # dla kazdej eopki
         # ocen polulacje (evaluate)
         # zapisz % najlepszych (strategia elitarna)
         # wybierz gatunki do crossowania (selection)
         # krzyzowanie gatunków (cross)
-        #pop = self.Crossover.cross(pop)
+        pop = self.Crossover.cross(pop)
         # mutacja i/lub inversja
+
+
+if __name__ == '__main__':
+    Algorithm().run()
