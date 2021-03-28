@@ -9,13 +9,13 @@ class Population:
         self.range_min = range_min
         self.range_max = range_max
         self.precision = precision
-        self.num_of_bits = self.binary_lenght()
+        self.num_of_bits = self.binary_length()
 
     def np_to_dec(self, li): # takes numpy array, returns decimal represntation
         li = ''.join(str(int(e)) for e in li)
         return int(li, 2)
 
-    def binary_lenght(self):
+    def binary_length(self):
         a = self.range_min
         b = self.range_max
         d = self.precision
@@ -39,7 +39,7 @@ class Population:
         return np.array(decoded)
 
     def evaluate_population(self, population):
-        return np.array(map(self.function, population))
+        return np.apply_along_axis(self.function, 1, population)
 
 
 if __name__ == '__main__':
@@ -47,5 +47,6 @@ if __name__ == '__main__':
     p = pop.generate_population()
     decoded = pop.decode_population(p)
     print(decoded)
-
+    evaluated = pop.evaluate_population(decoded)
+    print(evaluated)
 
