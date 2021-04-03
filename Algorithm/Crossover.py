@@ -3,7 +3,6 @@ import numpy as np
 
 def random_x_diff_ints(start, end, times):
     cross_points = [np.random.randint(start, end) for _ in range(times)]
-
     if end - start > times: # if it is passible
         while len(set(cross_points)) != len(cross_points):
             cross_points = [np.random.randint(start, end) for _ in range(times)]
@@ -24,6 +23,8 @@ class Crossover:
             return self.three_point_cross(pop)
         if self.decision == 'homonegous_cross':
             return self.homonegous_cross(pop)
+        else:
+            raise NameError("Not a type of crossover")
 
     def one_point_cross(self, pop):
         new_pop = []
