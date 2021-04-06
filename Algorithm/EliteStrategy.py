@@ -1,0 +1,26 @@
+import numpy as np
+
+
+class EliteStrategy:
+    def __init__(self, percentage):
+        self.percentage = percentage
+
+    def elite(self, pop, fintess):
+        pop_size = pop.shape[0]
+
+        n_selected = int(pop_size * self.percentage)
+        selected_indexes = (-fintess).argsort()[:n_selected] # to reverse sort (highest to lowest)
+        selected = pop[selected_indexes]
+        return selected
+
+
+if __name__ == '__main__':
+    pop = np.array([
+        [1, 2],
+        [2, 3],
+        [3, 4],
+    ])
+    fit = np.array([102, 1, 21])
+    eli = EliteStrategy(0.9)
+    p = eli.elite(pop, fit)
+    print(p)

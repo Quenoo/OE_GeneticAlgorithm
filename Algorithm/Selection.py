@@ -13,7 +13,6 @@ class Selection:
         self.decision = decision
         self.percentage = percentage
 
-
     def select(self, pop, evaluated_pop):
         if self.decision == 'best':
             return self.best(pop, evaluated_pop, self.percentage)
@@ -21,7 +20,6 @@ class Selection:
             return self.roulette_wheel(pop, evaluated_pop, self.percentage)
         if self.decision == 'tournament':
             return self.tournament(pop, evaluated_pop, self.percentage)
-
 
     def best(self, pop, evaluated_pop, percentage):
         pop_size = pop.shape[0]
@@ -36,7 +34,6 @@ class Selection:
         not_selected = new_pop_from_indexes(pop, not_selected_indexes)
 
         return selected, selected_values, not_selected
-
 
     def roulette_wheel(self, pop, evaluated_pop, percentage):
         # TODO: fix index ranges
@@ -65,7 +62,6 @@ class Selection:
         not_selected = [pop[np.random.randint(0, pop_size)] for x in range (pop.size - n_selected)]
 
         return selected, selected_values, not_selected
-
 
     def tournament(self, pop, evaluated_pop, percentage):
         pop_size = pop.shape[0]
