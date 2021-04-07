@@ -9,7 +9,7 @@ class EliteStrategy:
         pop_size = pop.shape[0]
 
         n_selected = int(pop_size * self.percentage)
-        selected_indexes = (-fintess).argsort()[:n_selected] # to reverse sort (highest to lowest)
+        selected_indexes = (fintess).argsort()[:n_selected] # to reverse sort (highest to lowest)
         selected = pop[selected_indexes]
         return selected
 
