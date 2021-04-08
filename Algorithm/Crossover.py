@@ -38,7 +38,7 @@ class Crossover:
             if roll < self.prob:
 
                 cross_p = random_x_diff_ints(0, pop.shape[2], 1)[0]
-                print(cross_p)
+                # print(cross_p)
 
                 pop_1_x, pop_1_y = pop[i][0], pop[i][1]
                 pop_2_x, pop_2_y = pop[i+1][0], pop[i+1][1]
@@ -78,7 +78,7 @@ class Crossover:
 
                 # while cross_p1 == cross_p2:
                 #     cross_p2 = np.random.randint(1, pop.shape[2])
-                print(cross_p1, cross_p2)
+                # print(cross_p1, cross_p2)
 
                 pop_1_x, pop_1_y = pop[i][0], pop[i][1]
                 pop_2_x, pop_2_y = pop[i+1][0], pop[i+1][1]
@@ -116,7 +116,7 @@ class Crossover:
             if roll < self.prob:
                 cross_p1, cross_p2, cross_p3 = random_x_diff_ints(1, pop.shape[2], 3)
 
-                print(cross_p1, cross_p2, cross_p3)
+                # print(cross_p1, cross_p2, cross_p3)
 
                 pop_1_x, pop_1_y = pop[i][0], pop[i][1]
                 pop_2_x, pop_2_y = pop[i+1][0], pop[i+1][1]

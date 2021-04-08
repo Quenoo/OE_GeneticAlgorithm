@@ -12,7 +12,7 @@ class Algorithm:
     def __init__(self,
                  epochs=1000,
                  crossover_type=Crossover('one_point_cross', 0.6),
-                 population=Population(booth_function, 10, 2, -10, 10, 6),
+                 population=Population(booth_function, 100, 2, -10, 10, 6),
                  mutation_type=Mutation('one_point_mutation', 0.1),
                  inversion_type=Inversion('standard_inversion', 0.05),
                  selection_type=Selection('best', 20),
@@ -46,16 +46,15 @@ class Algorithm:
             best_individual.append(self.Population.decode_population(pop)[index_best])
 
             # zapisz % najlepszych (strategia elitarna)
-            elite = self.EliteStrategy.elite(pop, fitness)
+            # elite = self.EliteStrategy.elite(pop, fitness)
             # wybierz gatunki do crossowania (selection)
-            # pop, selected_values, not_selected = self.Selection.select(pop, fitness)
+            selected, not_selected = self.Selection.select(pop, fitness)
             # krzyzowanie gatunków (cross)
-            pop = self.Crossover.cross(pop)
+            pop = self.Crossover.cross(selected)
+            pop = np.concatenate((pop, not_selected), axis=0)
             # mutacja i/lub inversja
             pop = self.Mutation.mutate(pop)
             pop = self.Inversion.inverse(pop)
-            # mutacja i/lub inversja
-            pop = np.concatenate((elite, pop))
         time_execution = time.time() - time_start
         print(f"Algorytm zajął {time_execution:.3f} sekund")
 
