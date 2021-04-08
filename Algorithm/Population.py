@@ -1,5 +1,5 @@
 import numpy as np
-from Function import booth_function
+
 
 class Population:
     def __init__(self, function, population_size, num_of_variables, range_min, range_max, precision):
@@ -27,7 +27,6 @@ class Population:
     def decode_population(self, population):
         a = self.range_min
         b = self.range_max
-        # d = self.precision
         m = self.num_of_bits
         decoded = []
         for i in range(0, len(population)):
@@ -41,14 +40,13 @@ class Population:
     def evaluate_population(self, population):
         population = self.decode_population(population)
         return np.array([self.function(x1, x2) for x1, x2 in population])
-        # return np.apply_along_axis(self.function, 1, population)
 
 
 if __name__ == '__main__':
-    pop = Population(booth_function, 5, 2, -1, 1, 6)
+    pop = Population(lambda x1, x2: x1 + x2, 5, 2, -1, 1, 6)
     p = pop.generate_population()
+    print(f"Generated population:\n{p}")
+    evaluated = pop.evaluate_population(p)
+    print(f"\nEvaluated population:\n{evaluated}")
     decoded = pop.decode_population(p)
-    print(decoded)
-    evaluated = pop.evaluate_population(decoded)
-    print(evaluated)
-
+    print(f"\nDecoded population:\n{decoded}")

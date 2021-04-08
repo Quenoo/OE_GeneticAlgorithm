@@ -9,7 +9,7 @@ class Gui(QWidget):
         # TODO: initialize configuration fields, pass values to algorithm, show results, plots and execution time
         self.show()
 
-    def init_window():
+    def init_window(self):
         window = QMainWindow()
         window.setWindowTitle("Genetic algorithm")
         window.show()

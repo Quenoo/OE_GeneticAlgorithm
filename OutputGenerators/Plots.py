@@ -1,3 +1,4 @@
+import os
 import matplotlib.pyplot as plt
 
 
@@ -11,7 +12,8 @@ class Plot:
         plt.ylabel(yname)
         plt.title(title)
         plt.show()
-        file_name = '../Plots/' + file_name
+        current_folder = os.path.dirname(os.path.abspath(__file__))
+        file_name = current_folder + '/../Plots/' + file_name
         plt.savefig(file_name)
 
 

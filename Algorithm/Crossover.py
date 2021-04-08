@@ -21,8 +21,8 @@ class Crossover:
             return self.two_point_cross(pop)
         if self.decision == 'three_point_cross':
             return self.three_point_cross(pop)
-        if self.decision == 'homonegous_cross':
-            return self.homonegous_cross(pop)
+        if self.decision == 'homogenous_cross':
+            return self.homogenous_cross(pop)
         else:
             raise NameError("Not a type of crossover")
 
@@ -141,7 +141,7 @@ class Crossover:
                 new_pop.append(pop[i+1])
         return np.array(new_pop)
 
-    def homonegous_cross(self, pop):
+    def homogenous_cross(self, pop):
         new_pop = []
         pop_size = pop.shape[0]
         if pop_size % 2 != 0:
@@ -177,5 +177,5 @@ if __name__ == '__main__':
     print(pop_2c)
     pop_3c = Crossover('three_point_cross', 1).cross(pop)
     print(pop_3c)
-    pop_homo = Crossover('homonegous_cross', 1).cross(pop)
+    pop_homo = Crossover('homogenous_cross', 1).cross(pop)
     print("\n\n", pop_homo)

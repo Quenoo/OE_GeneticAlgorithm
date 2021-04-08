@@ -5,11 +5,11 @@ class EliteStrategy:
     def __init__(self, percentage):
         self.percentage = percentage
 
-    def elite(self, pop, fintess):
+    def elite(self, pop, fitness):
         pop_size = pop.shape[0]
 
         n_selected = int(pop_size * self.percentage)
-        selected_indexes = (fintess).argsort()[:n_selected] # to reverse sort (highest to lowest)
+        selected_indexes = fitness.argsort()[:n_selected] # to reverse sort (highest to lowest)
         selected = pop[selected_indexes]
         return selected
 

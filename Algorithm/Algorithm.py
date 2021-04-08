@@ -1,28 +1,29 @@
-# from Algorithm.Population import *
 from Crossover import *
-from Function import booth_function
-from Population import *
 from Mutation import *
 from Inversion import *
+from OutputGenerators.Files import Files
+from OutputGenerators.Plots import Plot
 from Selection import *
 from EliteStrategy import *
-from OutputGenerators.Files import *
-from OutputGenerators.Plots import *
 import time
-# from Algorithm.Crossover import Crossover
-# from Algorithm.Function import booth_function
-# from Algorithm.Population import Population
 
 
 class Algorithm:
-    def __init__(self):
-        self.epochs = 1000
-        self.Crossover = Crossover('one_point_cross', 0.6)
-        self.Population = Population(booth_function, 10, 2, -10, 10, 6)
-        self.Mutation = Mutation('one_point_mutation', 0.1)
-        self.Inversion = Inversion('standard_inversion', 0.05)
-        self.Selection = Selection('best', 1)
-        self.EliteStrategy = EliteStrategy(0.1)
+    def __init__(self,
+                 epochs=1000,
+                 crossover_type=Crossover('one_point_cross', 0.6),
+                 population=Population(booth_function, 10, 2, -10, 10, 6),
+                 mutation_type=Mutation('one_point_mutation', 0.1),
+                 inversion_type=Inversion('standard_inversion', 0.05),
+                 selection_type=Selection('best', 20),
+                 elite_strategy=EliteStrategy(0.1)):
+        self.epochs = epochs
+        self.Crossover = crossover_type
+        self.Population = population
+        self.Mutation = mutation_type
+        self.Inversion = inversion_type
+        self.Selection = selection_type
+        self.EliteStrategy = elite_strategy
 
     def run(self):
         best_value = []
@@ -33,11 +34,11 @@ class Algorithm:
         pop = self.Population.generate_population()
         time_start = time.time()
         for _ in range(self.epochs):
-            # dla kazdej eopki
-            # ocen polulacje (evaluate)
+            # dla kazdej epoki
+            # ocen populacje (evaluate)
             fitness = self.Population.evaluate_population(pop)
 
-            #zapisz wartosci do wygenerowania wykresow
+            # zapisz wartosci do wygenerowania wykresow
             best_value.append(fitness.min())
             avg_value.append(fitness.mean())
             std_avg_value.append(fitness.std())
@@ -59,11 +60,11 @@ class Algorithm:
         print(f"Algorytm zajął {time_execution:.3f} sekund")
 
         Plot.draw_save_plot(best_value, 'Wartość funkcji', 'Numer epoki',
-                            'Wykres wartości funkcji dla najlepszy osobników', 'best_inidivdual')
+                            'Wykres wartości funkcji dla najlepszych osobników', 'best_individual')
         Plot.draw_save_plot(avg_value, 'Wartość funkcji', 'Numer epoki',
                             'Wykres średniej wartości funkcji dla populacji', 'avg_pop')
         Plot.draw_save_plot(std_avg_value, 'Wartość odchylenia standardowego', 'Numer epoki',
-                            'Wykres odychlenia standardowego dla populacji', 'avg_std_pop')
+                            'Wykres odchylenia standardowego dla populacji', 'avg_std_pop')
         Files.numpy_to_csv(best_individual, 'best_individual.csv')
 
 
