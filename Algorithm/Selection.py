@@ -8,24 +8,24 @@ def new_pop_from_indexes(pop, indexes):
 
 class Selection:
     def __init__(self, decision, percentage):
-        self.decision = decision
         self.percentage = percentage
+        self.decision = decision
 
     def select(self, pop, evaluated_pop):
         if self.decision == 'best':
-            return self.best(pop, evaluated_pop, self.percentage)
+            return self.best(pop, evaluated_pop)
         if self.decision == 'roulette_wheel':
-            return self.roulette_wheel(pop, evaluated_pop, self.percentage)
+            return self.roulette_wheel(pop, evaluated_pop)
         if self.decision == 'tournament':
-            return self.tournament(pop, evaluated_pop, self.percentage)
+            return self.tournament(pop, evaluated_pop)
         else:
             raise NameError("Not a type of selection")
 
-    def best(self, pop, evaluated_pop, percentage):
+    def best(self, pop, evaluated_pop):
         pop_size = pop.shape[0]
         not_selected_indexes = [i for i in range(pop_size)]
 
-        n_selected = int(evaluated_pop.size * (percentage / 100))
+        n_selected = int(evaluated_pop.size * self.percentage)
         selected_indexes = evaluated_pop.argsort()[:n_selected]
         selected = new_pop_from_indexes(pop, selected_indexes)
 
@@ -34,37 +34,32 @@ class Selection:
 
         return selected, not_selected
 
-    def roulette_wheel(self, pop, evaluated_pop, percentage):
-        pop_size = pop.shape[0]
-        total = np.insert(np.cumsum(1 / evaluated_pop), 0, 0)
+    def roulette_wheel(self, pop, evaluated_pop):
+        evaluated_pop = 1 / (evaluated_pop + 1)
+        total = np.sum(evaluated_pop)
+        scores = np.array([x / total for x in evaluated_pop])
+
+        cumsum = np.concatenate(([0], np.cumsum(scores)))
+
         rng = np.random.default_rng()
 
-        n_selected = int(evaluated_pop.size * (percentage / 100))
-        selected = []
-        counter = 0
-        i = 1
+        indexes = []
 
-        while counter < n_selected:
-            if i == total.size:
-                i = i - 1
+        for _ in range(pop.shape[0]):
+            rng_num = rng.random()
 
-            prev = total[i - 1] / total[-1]
-            curr = total[i] / total[-1]
+            for index in range(1, cumsum.shape[0]):
+                if rng_num > cumsum[index - 1] and rng_num < cumsum[index]:
+                    indexes.append(index - 1)
+                    break
 
-            if prev <= rng.random() < curr:
-                selected.append(pop[i - 1])
-                counter += 1
-                i = 1
-            else:
-                i += 1
+        new_pop = pop[indexes]
 
-        not_selected = [pop[np.random.randint(0, pop_size)] for _ in range(pop.size - n_selected)]
+        return new_pop, []
 
-        return np.array(selected), np.array(not_selected)
-
-    def tournament(self, pop, evaluated_pop, percentage):
+    def tournament(self, pop, evaluated_pop):
         pop_size = pop.shape[0]
-        k = pop_size // (int((percentage / 100) * pop_size))
+        k = pop_size // (int(self.percentage * pop_size))
         not_selected_indexes = [i for i in range(pop_size)]
 
         selected_indexes = np.array([i for i in range(len(evaluated_pop))])
@@ -85,10 +80,10 @@ if __name__ == '__main__':
     p = pop.generate_population()
     evaluated = pop.evaluate_population(p)
 
-    pop_best = Selection('best', 20).select(p, evaluated)
+    pop_best = Selection('best', 0.2).select(p, evaluated)
     print(f"20% from best selection:\n{pop.decode_population(pop_best[0])}")
-    pop_roulette = Selection('roulette_wheel', 20).select(p, evaluated)
-    print(f"\n\n20% from roulette selection:\n{pop.decode_population(pop_roulette[0])}")
-    pop_tournament = Selection('tournament', 20).select(p, evaluated)
+    pop_roulette = Selection('roulette_wheel', 0.2).select(p, evaluated)
+    print(f"\n\nRoulette selection:\n{pop.decode_population(pop_roulette[0])}")
+    pop_tournament = Selection('tournament', 0.2).select(p, evaluated)
     print(f"\n\n20% from tournament selection:\n{pop.decode_population(pop_tournament[0])}")
 
