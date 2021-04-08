@@ -6,6 +6,8 @@ class EliteStrategy:
         self.percentage = percentage
 
     def elite(self, pop, fitness):
+        if self.percentage == 0:
+            return np.array([])
         pop_size = pop.shape[0]
 
         n_selected = int(pop_size * self.percentage)

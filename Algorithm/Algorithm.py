@@ -9,21 +9,15 @@ import time
 
 
 class Algorithm:
-    def __init__(self,
-                 epochs=1000,
-                 crossover_type=Crossover('one_point_cross', 0.6),
-                 population=Population(booth_function, 100, 2, -10, 10, 6),
-                 mutation_type=Mutation('one_point_mutation', 0.1),
-                 inversion_type=Inversion('standard_inversion', 0.05),
-                 selection_type=Selection('best', 20),
-                 elite_strategy=EliteStrategy(0.1)):
-        self.epochs = epochs
-        self.Crossover = crossover_type
-        self.Population = population
-        self.Mutation = mutation_type
-        self.Inversion = inversion_type
-        self.Selection = selection_type
-        self.EliteStrategy = elite_strategy
+    def __init__(self, params):
+        self.epochs = params['epochs']
+        self.Crossover = Crossover(params['crossover_type'], params['crossover_prob'])
+        self.Population = Population(booth_function, params['population_size'], 2, -10, 10,
+                                     params['population_precision'])
+        self.Mutation = Mutation(params['muataion_type'], params['muataion_prob'])
+        self.Inversion = Inversion(params['inversion_type'], params['inversion_prob'])
+        self.Selection = Selection(params['selection_type'], params['selection_prob'])
+        self.EliteStrategy = EliteStrategy(params['elite_prob'])
 
     def run(self):
         best_value = []
@@ -46,28 +40,44 @@ class Algorithm:
             best_individual.append(self.Population.decode_population(pop)[index_best])
 
             # zapisz % najlepszych (strategia elitarna)
-            # elite = self.EliteStrategy.elite(pop, fitness)
+            elite = self.EliteStrategy.elite(pop, fitness)
             # wybierz gatunki do crossowania (selection)
             selected, not_selected = self.Selection.select(pop, fitness)
             # krzyzowanie gatunków (cross)
             pop = self.Crossover.cross(selected)
-            pop = np.concatenate((pop, not_selected), axis=0)
             # mutacja i/lub inversja
             pop = self.Mutation.mutate(pop)
             pop = self.Inversion.inverse(pop)
+            # jezeli strategia elitarna jest uzywana
+            if elite.shape[0] != 0:
+                #  polacz najlepszy % z populacja
+                pop = np.concatenate((pop[:-elite.shape[0]], not_selected)) # , axis=0
+
         time_execution = time.time() - time_start
         print(f"Algorytm zajął {time_execution:.3f} sekund")
 
-        Plot.draw_save_plot(best_value, 'Wartość funkcji', 'Numer epoki',
+        Plot.draw_save_plot(best_value, 'Numer epoki', 'Wartość funkcji',
                             'Wykres wartości funkcji dla najlepszych osobników', 'best_individual')
-        Plot.draw_save_plot(avg_value, 'Wartość funkcji', 'Numer epoki',
+        Plot.draw_save_plot(avg_value, 'Numer epoki', 'Wartość funkcji',
                             'Wykres średniej wartości funkcji dla populacji', 'avg_pop')
-        Plot.draw_save_plot(std_avg_value, 'Wartość odchylenia standardowego', 'Numer epoki',
+        Plot.draw_save_plot(std_avg_value, 'Numer epoki', 'Wartość odchylenia standardowego',
                             'Wykres odchylenia standardowego dla populacji', 'avg_std_pop')
         Files.numpy_to_csv(best_individual, 'best_individual.csv')
 
 
-
-
 if __name__ == '__main__':
-    Algorithm().run()
+    params = {
+        'epochs': 100,
+        'crossover_type': 'one_point_cross',
+        'crossover_prob': 0.6,
+        'population_size': 10,
+        'population_precision': 6,
+        'muataion_type': 'one_point_mutation',
+        'muataion_prob': 0.1,
+        'inversion_type': 'standard_inversion',
+        'inversion_prob': 0.05,
+        'selection_type': 'best',
+        'selection_prob': 80,
+        'elite_prob': 0.1
+    }
+    Algorithm(params).run()
