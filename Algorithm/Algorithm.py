@@ -80,17 +80,17 @@ class Algorithm:
 
 if __name__ == '__main__':
     params = {
-        'epochs': 1000,
+        'epochs': 500,
         'crossover_type': 'one_point_cross',
         'crossover_prob': 0.6,
-        'population_size': 10,
+        'population_size': 200,
         'population_precision': 6,
         'mutation_type': 'one_point_mutation',
         'mutation_prob': 0.1,
         'inversion_type': 'standard_inversion',
         'inversion_prob': 0.05,
-        'selection_type': 'roulette_wheel',
+        'selection_type': 'tournament',
         'selection_prob': 0.2,
-        'elite_prob': 0.1
+        'elite_prob': 0.01
     }
     Algorithm(params).run()
