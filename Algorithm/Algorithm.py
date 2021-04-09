@@ -38,7 +38,7 @@ class Algorithm:
         pop = self.Population.generate_population()
         time_start = time.time()
         for i in range(self.epochs):
-            print(i)
+            # print(i)
             # dla kazdej epoki
             # ocen populacje (evaluate)
             fitness = self.Population.evaluate_population(pop)
@@ -67,7 +67,7 @@ class Algorithm:
                 pop = np.concatenate((pop[:-elite.shape[0]], elite)) # , axis=0
 
         time_execution = time.time() - time_start
-        print(f"Algorytm zajął {time_execution:.3f} sekund")
+        # print(f"Algorytm zajął {time_execution:.3f} sekund")
 
         Plot.draw_save_plot(best_value, 'Numer epoki', 'Wartość funkcji',
                             'Wykres wartości funkcji dla najlepszych osobników', 'best_individual')
@@ -76,6 +76,8 @@ class Algorithm:
         Plot.draw_save_plot(std_avg_value, 'Numer epoki', 'Wartość odchylenia standardowego',
                             'Wykres odchylenia standardowego dla populacji', 'avg_std_pop')
         Files.numpy_to_csv(best_individual, 'best_individual.csv')
+
+        return time_execution
 
 
 if __name__ == '__main__':
