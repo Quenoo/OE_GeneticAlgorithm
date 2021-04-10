@@ -19,7 +19,7 @@ class Population:
         a = self.range_min
         b = self.range_max
         d = self.precision
-        return int(np.ceil(np.log2((b - a) * (10 ** d)) + np.log2(1)))
+        return int(np.ceil(np.log2(float((b - a) * (10 ** d))) + np.log2(1)))
 
     def generate_population(self):
         return np.random.randint(2, size=(self.population_size, self.num_of_variables, self.num_of_bits))
