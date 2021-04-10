@@ -131,14 +131,15 @@ class MainWindow(QWidget):
             'elite_prob':           self.input_to_float(self.text_at(16))
         }
 
-        time_execution = Algorithm(params).run()
+        time_execution, y = Algorithm(params).run()
 
         x1, x2 = self.get_last_individual()
 
         msg = QMessageBox()
         msg.setWindowTitle("Wynik")
         msg.setText(f"Algorytm zajął {time_execution:.4f} sekund\nNajlepszy osobnik z ostatniej epoki:\n"
-                    f"{float(x1):.8f}, {float(x2):.8f}")
+                    f"x1 = {float(x1):.8f}, x2 = {float(x2):.8f}\n"
+                    f"f(x1, x2): {y}")
 
         msg.exec_()
 

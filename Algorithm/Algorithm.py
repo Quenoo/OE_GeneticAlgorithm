@@ -77,7 +77,7 @@ class Algorithm:
                             'Wykres odchylenia standardowego dla populacji', 'avg_std_pop')
         Files.numpy_to_csv(best_individual, 'best_individual.csv')
 
-        return time_execution
+        return time_execution, best_value[-1]
 
 
 if __name__ == '__main__':
