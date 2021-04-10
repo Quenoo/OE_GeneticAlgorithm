@@ -68,7 +68,7 @@ class MainWindow(QWidget):
         self.add_operation_input("Mutation method", ['one_point_mutation', 'two_point_mutation', 'edge_mutation'])
         self.add_operation_input("Inversion method", ['standard_inversion'])
 
-        self.add_operation_param("Selection probability")
+        self.add_operation_param("Selection percentage")
         self.add_operation_param("Crossover probability")
         self.add_operation_param("Mutation probability")
         self.add_operation_param("Inversion probability")
